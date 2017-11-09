@@ -20,7 +20,7 @@ void controlCalculation()
     if(pid_setpoint > -2.5)pid_setpoint -= 0.05;                            //Slowly change the setpoint angle so the robot starts leaning forewards
     if(pid_output > myOperatingValues.max_target_speed * -1)pid_setpoint -= 0.005;            //Slowly change the setpoint angle so the robot starts leaning forewards
   } else
-  if(RIGHT_BUTTON){                                            //If the forth bit of the receive byte is set change the left and right variable to turn the robot to the right
+  if(UP_BUTTON){                                            //If the forth bit of the receive byte is set change the left and right variable to turn the robot to the right
     if(pid_setpoint < 2.5)pid_setpoint += 0.05;                             //Slowly change the setpoint angle so the robot starts leaning backwards
     if(pid_output < myOperatingValues.max_target_speed)pid_setpoint += 0.005;                 //Slowly change the setpoint angle so the robot starts leaning backwards
   } else {                                                    //Slowly reduce the setpoint to zero if no foreward or backward command is given

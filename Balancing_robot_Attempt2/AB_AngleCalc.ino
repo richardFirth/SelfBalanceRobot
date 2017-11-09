@@ -18,9 +18,9 @@
 */
   angle_acc = getAngleAccelerationFromGyro();           //Calculate the current angle according to the accelerometer (delta from upright)
 
-  if(startProg == 0 && robotUpright()){                     //If the accelerometer angle is almost 0
+  if(!startProg && robotUpright()){                     //If the accelerometer angle is almost 0
     angle_gyro = angle_acc;                                                 //Load the accelerometer angle in the angle_gyro variable
-    startProg = 1;                                                              //Set the start variable to start the PID controller
+    startProg = true;                                                              //Set the start variable to start the PID controller
     digitalWrite(ENABLE,LOW);
   }
 

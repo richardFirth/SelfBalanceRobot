@@ -11,13 +11,9 @@ void checkBatteryVoltage(int rawPinRead)
 void lowVoltageAlarm()
 {
    while(1){
-      digitalWrite(P_GAIN, HIGH);
-      digitalWrite(I_GAIN, LOW);
-      digitalWrite(D_GAIN, HIGH); 
+      SetAllLEDS(1,0,1,0,1); 
       delay(250);
-      digitalWrite(P_GAIN, LOW);
-      digitalWrite(I_GAIN, HIGH);
-      digitalWrite(D_GAIN, LOW);  
+      SetAllLEDS(0,1,0,1,0);   
       delay(250);
    }
 }

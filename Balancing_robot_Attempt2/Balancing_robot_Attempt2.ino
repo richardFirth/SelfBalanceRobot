@@ -84,8 +84,8 @@ float pid_output_left, pid_output_right;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void setup(){
   Serial.begin(9600);                                                       //Start the serial port at 9600 kbps
-  Serial.println(F("Balancing_robot_Attempt3"));
-  Serial.println(F("Last Modified Nov 7 2017"));
+  Serial.println(F("Balancing_robot_Attempt2"));
+  Serial.println(F("Last Modified Nov 8 2017"));
   
   Wire.begin();                                                             //Start the I2C bus as master
   TWBR = 12;                                                                //Set the I2C clock speed to 400kHz
@@ -106,37 +106,14 @@ pinMode(RIGHT_STP,OUTPUT);   //step
 
 digitalWrite(ENABLE,HIGH); // stop current through steppers
 
-
-
-if (digitalRead(PUSH_BUTTON))
-{
-    defaultOperatingValues();
-    digitalWrite(P_GAIN,HIGH);   //blue
-    digitalWrite(I_GAIN,HIGH);   //green
-    digitalWrite(D_GAIN,HIGH);   //red
-}
-
-
-
+checkForResetValues(); // if you hold the pushbutton it resets myOperatingValues to default
 loadOperatingValues();
 
+setupTimer();         // set the arduino timing registers
+setGyroRegisters();  // set the registers via I2C
+GyroCalibration();  // calibrate gyro
 
-setupTimer();
-setGyroRegisters();
-GyroCalibration();
-
-/*
-while(1)
-{
-  Serial.println(getBalanceValue());
-  delay(100);
-}
-*/
-
-
-
-
-  loop_timer = micros() + 4000;                                             //Set the loop_timer variable at the next end loop time
+loop_timer = micros() + 4000;                                             //Set the loop_timer variable at the next end loop time
 
 }
 
@@ -144,37 +121,45 @@ while(1)
 //Main program loop
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void loop(){
+   getLatestXBeeData();
 
- getLatestXBeeData();
+   checkBatteryVoltage(analogRead(VBATT));
+   angleCalculation();
 
- checkBatteryVoltage(analogRead(VBATT));
- angleCalculation();
+   if(startProg){
+        balancingLoop();  
+   } else {
+        atRestLoop();
+   }
+
+    
+
+}
+
+
+
+
+void balancingLoop() // when the robot is balanced do this loop
+{
+
  PIDCalculations();
  controlCalculation();
  MotorPulseCalc();
- 
-  if(!startProg){
-    digitalWrite(EDIT_MODE, !digitalRead(EDIT_MODE)); 
-    delay(50);
-  }
-  
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //Loop time timer
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //The angle calculations are tuned for a loop time of 4 milliseconds. To make sure every loop is exactly 4 milliseconds a wait loop
-  //is created by setting the loop_timer variable to +4000 microseconds every loop.
- 
- // while(loop_timer > micros());
- // loop_timer += 4000;
-
-   timingProblem = true;
-  while(loop_timer > micros()){
-    timingProblem = false; // if the other code takes too long, we never enter the loop.
-  }
-  loop_timer = micros() + 4000;
-    digitalWrite(I_GAIN,!timingProblem);
-    digitalWrite(P_GAIN,timingProblem);
+ loopTimer();
 }
+
+void atRestLoop() // when the robot is tipped over do this loop
+{
+    
+    delay(10);
+    if (JOYSTICK_BUTTON) SetAllLEDS(1,0,0,0,0);
+  
+}
+
+
+
+
+
 
 
 

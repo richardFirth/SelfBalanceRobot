@@ -22,10 +22,14 @@ void PIDCalculations()
 
   if(pid_output < 5 && pid_output > -5)pid_output = 0;                      //Create a dead-band to stop the motors when the robot is balanced
 
-  if(angle_gyro > 30 || angle_gyro < -30 || startProg == 0){    //If the robot tips over or the start variable is zero or the battery is empty
+  if(angle_gyro > 30 || angle_gyro < -30 || !startProg){                         //If the robot tips over or the start variable is zero or the battery is empty
     pid_output = 0;                                                         //Set the PID controller output to 0 so the motors stop moving
     pid_i_mem = 0;                                                          //Reset the I-controller memory
-    startProg = 0;                                                              //Set the start variable to 0
+    startProg = false;                                                      //Set the start variable to 0
+
+
+    SetAllLEDS(0,0,0,0,0);
+    
     self_balance_pid_setpoint = 0;                                          //Reset the self_balance_pid_setpoint variable
     digitalWrite(ENABLE,HIGH);
   }
