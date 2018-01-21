@@ -131,12 +131,7 @@ void loop(){
    } else {
         atRestLoop();
    }
-
-    
-
 }
-
-
 
 
 void balancingLoop() // when the robot is balanced do this loop
@@ -150,10 +145,8 @@ void balancingLoop() // when the robot is balanced do this loop
 
 void atRestLoop() // when the robot is tipped over do this loop
 {
-    
     delay(10);
     if (JOYSTICK_BUTTON) SetAllLEDS(1,0,0,0,0);
-  
 }
 
 
