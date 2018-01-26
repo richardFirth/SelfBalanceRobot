@@ -15,6 +15,10 @@ I created a PCB for my own version of the project.
 My version uses an XBee in place of the bluetooth module,  
 and the sparkfun wireless joystick instead of the nunchuck.  
 
+I also connected the pins differently! The original code by Joop doesn't run on my copy.
+
+
+
 *Joystick Code and Case:* https://github.com/richardFirth/WirelessJoystick  
 
 Order PCB's in Model  
