@@ -11,11 +11,18 @@
 ///////////////////////////////////////////////////////////////////////////////////////
 
 
+// https://github.com/richardFirth/SelfBalanceRobot
 
+// remix of joop brokkings thing. 
+// http://www.brokking.net/yabr_main.html
+
+// https://www.youtube.com/watch?v=6WWqo-Yr8lA
+// https://www.youtube.com/watch?v=VxpMWncBKZ
+// https://www.youtube.com/watch?v=mG4OtAiY_wU
 
 
 #include <SoftwareSerial.h>  // RF
-#include <EEPROM.h>
+#include <EEPROM.h> // PID Settings are stored in EEProm
 #include <Wire.h>                                            //Include the Wire.h library so we can communicate with the gyro
 
 int gyro_address = 0x68;                                     //MPU-6050 I2C address (0x68 or 0x69)
@@ -85,35 +92,24 @@ float pid_output_left, pid_output_right;
 void setup(){
   Serial.begin(9600);                                                       //Start the serial port at 9600 kbps
   Serial.println(F("Balancing_robot_Attempt2"));
-  Serial.println(F("Last Modified Nov 8 2017"));
+  Serial.println(F("Last Modified Jan 27 2018"));
   
   Wire.begin();                                                             //Start the I2C bus as master
   TWBR = 12;                                                                //Set the I2C clock speed to 400kHz
   XBee.begin(9600);
 
-pinMode(CALIB_LED,OUTPUT);   //yellow
-pinMode(P_GAIN,OUTPUT);   //blue
-pinMode(I_GAIN,OUTPUT);   //green
-pinMode(D_GAIN,OUTPUT);   //red
-pinMode(EDIT_MODE,OUTPUT);   //red
-pinMode(ENABLE,OUTPUT);   //red
-pinMode(PUSH_BUTTON,INPUT);   //SW1
-
-pinMode(LEFT_DIR,OUTPUT);   //direction
-pinMode(LEFT_STP,OUTPUT);   //step
-pinMode(RIGHT_DIR,OUTPUT);   //direction
-pinMode(RIGHT_STP,OUTPUT);   //step
-
-digitalWrite(ENABLE,HIGH); // stop current through steppers
-
-checkForResetValues(); // if you hold the pushbutton it resets myOperatingValues to default
-loadOperatingValues();
-
-setupTimer();         // set the arduino timing registers
-setGyroRegisters();  // set the registers via I2C
-GyroCalibration();  // calibrate gyro
-
-loop_timer = micros() + 4000;                                             //Set the loop_timer variable at the next end loop time
+  setPinModes();
+  
+  digitalWrite(ENABLE,HIGH); // stop current through steppers
+  
+  checkForResetValues(); // if you hold the pushbutton at power up it resets myOperatingValues to default
+  loadOperatingValues();
+  
+  setupTimer();         // set the arduino timing registers
+  setGyroRegisters();  // set the registers via I2C
+  GyroCalibration();  // calibrate gyro
+  
+  loop_timer = micros() + 4000; //Set the loop_timer variable at the next end loop time
 
 }
 
@@ -136,7 +132,6 @@ void loop(){
 
 void balancingLoop() // when the robot is balanced do this loop
 {
-
  PIDCalculations();
  controlCalculation();
  MotorPulseCalc();
@@ -148,15 +143,6 @@ void atRestLoop() // when the robot is tipped over do this loop
     delay(10);
     if (JOYSTICK_BUTTON) SetAllLEDS(1,0,0,0,0);
 }
-
-
-
-
-
-
-
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Interrupt routine  TIMER2_COMPA_vect
@@ -190,29 +176,5 @@ ISR(TIMER2_COMPA_vect){
   else if(throttle_counter_right_motor == 1)PORTD |= 0b10000000;            //Set output 7 high to create a pulse for the stepper controller
   else if(throttle_counter_right_motor == 2)PORTD &= 0b01111111;            //Set output 7 low because the pulse only has to last for 20us
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

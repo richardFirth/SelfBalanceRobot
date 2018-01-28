@@ -2,8 +2,6 @@
 
 
 
-
-
 void loadOperatingValues()
 {
   EEPROM.get(0, myOperatingValues);
@@ -11,17 +9,14 @@ void loadOperatingValues()
 
 void loopTimer()
 {
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //Loop time timer
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //The angle calculations are tuned for a loop time of 4 milliseconds. To make sure every loop is exactly 4 milliseconds a wait loop
-  //is created by setting the loop_timer variable to +4000 microseconds every loop.
+ 
+  
 
    timingProblem = true;
-  while(loop_timer > micros()){
-    timingProblem = false; // if the other code takes too long, we never enter the loop.
+  while(loop_timer > micros()){ //  To make sure every loop is exactly 4 milliseconds a wait loop
+    timingProblem = false;  // if the other code takes too long, we never enter the loop, and problem will be true.
   }
-  loop_timer = micros() + 4000;
+  loop_timer = micros() + 4000;   //The angle calculations are tuned for a loop time of 4 milliseconds.
     digitalWrite(I_GAIN,!timingProblem);
     digitalWrite(P_GAIN,timingProblem);
 }
@@ -53,24 +48,13 @@ void checkForResetValues()
 
 
 void SetAllLEDS(int editMode, int P, int I, int D, int Calib){
-
-setSingleLED(EDIT_MODE, editMode);
-setSingleLED(P_GAIN, P);
-setSingleLED(I_GAIN, I);
-setSingleLED(D_GAIN, D);
-setSingleLED(CALIB_LED, Calib);
-
-  
+ 
+   digitalWrite(EDIT_MODE, editMode);
+   digitalWrite(P_GAIN, P);
+   digitalWrite(I_GAIN, I);
+   digitalWrite(D_GAIN, D);
+   digitalWrite(CALIB_LED, Calib);
 }
-
-
-void setSingleLED(int LED, int setType)
-{
-  if (setType == 0) digitalWrite(LED,LOW);
-  if (setType == 1) digitalWrite(LED,HIGH);
-}
-
-
 
 void resetToDefaultOperatingValues()
 {

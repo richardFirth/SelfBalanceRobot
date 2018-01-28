@@ -1,28 +1,18 @@
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Angle calculations
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
  void angleCalculation()
  {
 
-  /*
-  Wire.beginTransmission(gyro_address);                                     //Start communication with the gyro
-  Wire.write(0x3F);                                                         //Start reading at register 3F
-  Wire.endTransmission();                                                   //End the transmission
-  Wire.requestFrom(gyro_address, 2);                                        //Request 2 bytes from the gyro
-  int accelerometer_data_raw = Wire.read()<<8|Wire.read();                      //Combine the two bytes to make one integer
-  accelerometer_data_raw += myOperatingValues.acc_calibration_value;         //Add the accelerometer calibration value
-  if(accelerometer_data_raw > 8200)accelerometer_data_raw = 8200;           //Prevent division by zero by limiting the acc data to +/-8200;
-  if(accelerometer_data_raw < -8200)accelerometer_data_raw = -8200;         //Prevent division by zero by limiting the acc data to +/-8200;
-*/
   angle_acc = getAngleAccelerationFromGyro();           //Calculate the current angle according to the accelerometer (delta from upright)
 
-  if(!startProg && robotUpright()){                     //If the accelerometer angle is almost 0
-    angle_gyro = angle_acc;                                                 //Load the accelerometer angle in the angle_gyro variable
-    startProg = true;                                                              //Set the start variable to start the PID controller
-    digitalWrite(ENABLE,LOW);
-  }
+    if(!startProg && robotUpright()){                     //If the accelerometer angle is almost 0
+      angle_gyro = angle_acc;                                                 //Load the accelerometer angle in the angle_gyro variable
+      startProg = true;                                                              //Set the start variable to start the PID controller
+      digitalWrite(ENABLE,LOW);
+    }
 
   Wire.beginTransmission(gyro_address);                                     //Start communication with the gyro
   Wire.write(0x43);                                                         //Start reading at register 43
@@ -51,9 +41,13 @@
 
 
 
+
 boolean robotUpright(){
  return (angle_acc > -0.5 && angle_acc < 0.5);
 }
+
+
+
 
 float getAngleAccelerationFromGyro()
 {

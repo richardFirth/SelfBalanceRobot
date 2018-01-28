@@ -1,3 +1,5 @@
+// this code is copypasted between my projects, so not all functions are used.
+
 byte setBit(byte b, int pos) {
   if (pos < 0 || pos > 7)
     return b;

@@ -27,7 +27,6 @@ void PIDCalculations()
     pid_i_mem = 0;                                                          //Reset the I-controller memory
     startProg = false;                                                      //Set the start variable to 0
 
-
     SetAllLEDS(0,0,0,0,0);
     
     self_balance_pid_setpoint = 0;                                          //Reset the self_balance_pid_setpoint variable
