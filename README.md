@@ -22,6 +22,7 @@ I also connected the pins differently! The original code by Joop doesn't run on 
 Order PCB's in Model  
 *Main PCB Board:* https://oshpark.com/shared_projects/zdu8sdQ4  
 *Stepper Boards:* https://oshpark.com/shared_projects/qPz78o0H  (facilitate connection of stepper)
+
 *Xbee Board:* https://oshpark.com/shared_projects/hA4cGipD  
 (you need one of each to build the Robot)  
 
